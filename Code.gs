@@ -228,3 +228,44 @@ function generateYoutubeContent(items, sheetYoutube) {
     Logger.log("Error generating YouTube content: " + e.toString());
   }
 }
+
+function moveNewsToSent() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetGWS = getOrCreateSheet(ss, 'GWS');
+  var sheetSent = getOrCreateSheet(ss, 'GWS Sent News');
+  
+  var lastRow = sheetGWS.getLastRow();
+  
+  // Verificar si hay datos (asumiendo fila 1 es encabezado)
+  if (lastRow < 2) {
+    SpreadsheetApp.getUi().alert("No hay noticias en 'GWS' para mover.");
+    return;
+  }
+  
+  // Obtener datos (excluyendo encabezados)
+  // getRange(row, column, numRows, numColumns)
+  var range = sheetGWS.getRange(2, 1, lastRow - 1, 4); // 4 columnas: Noticia, Fecha, Sección, Sub-sección
+  
+  // Copiar a Sent News
+  // Usamos copyTo para mantener formatos (links, negritas, etc) o getValues/setValues?
+  // copyTo es mejor para mantener los RichText (links).
+  
+  // Determinar dónde pegar en Sent News
+  var sentLastRow = sheetSent.getLastRow();
+  var destRow = sentLastRow + 1;
+  
+  // Si Sent News está vacía, poner encabezados primero
+  if (sentLastRow === 0) {
+    sheetSent.appendRow(['Noticia', 'Fecha', 'Sección', 'Sub-sección']);
+    sheetSent.getRange('A1:D1').setFontWeight('bold');
+    destRow = 2;
+  }
+  
+  // Copiar valores y formatos
+  range.copyTo(sheetSent.getRange(destRow, 1), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+  
+  // Borrar datos de GWS (mantener encabezados)
+  sheetGWS.deleteRows(2, lastRow - 1);
+  
+  SpreadsheetApp.getUi().alert("Se movieron " + (lastRow - 1) + " noticias a 'GWS Sent News'.");
+}
