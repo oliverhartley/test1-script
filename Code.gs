@@ -1,4 +1,12 @@
-var GEMINI_API_KEY = 'AIzaSyBMvA-erSqoCDVytNeJYsT-6uTqEl9x2CY';
+function getGeminiApiKey() {
+  var key = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
+  if (!key) {
+    throw new Error("Por favor configura la propiedad 'GEMINI_API_KEY' en la configuración del proyecto (Icono de engranaje > Propiedades del script).");
+  }
+  return key;
+}
+
+var GEMINI_API_KEY = getGeminiApiKey();
 
 function fetchWorkspaceUpdates() {
   var url = 'https://workspaceupdates.googleblog.com/feeds/posts/default?alt=rss';
