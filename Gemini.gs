@@ -1,5 +1,5 @@
 function classifyWithGemini(titles) {
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_API_KEY;
+  var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-pro:generateContent?key=' + GEMINI_API_KEY;
   
   var prompt = "You are a classifier for Google Workspace Updates. Classify the following news titles into the correct 'Section' and 'Sub-section'.\n" +
     "Return ONLY a raw JSON array of objects with 'section' and 'sub_section' keys. Array length must match input.\n" +
@@ -26,7 +26,7 @@ function classifyWithGemini(titles) {
 function generateYoutubeContent(items, sheetYoutube) {
   var titles = items.map(function(i) { return i.title; }).join("\n- ");
   
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_API_KEY;
+  var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-pro:generateContent?key=' + GEMINI_API_KEY;
   var prompt = "Create a YouTube Video Title and Description for a video covering these Google Workspace updates.\n" +
     "The description should be engaging, use bullet points for the news, and include relevant hashtags at the end.\n" +
     "News Updates:\n" + titles + "\n\n" +
